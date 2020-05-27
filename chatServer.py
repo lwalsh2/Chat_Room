@@ -15,7 +15,7 @@ s.bind(saddr)
 
 # listen defines our connection limit
 s.listen(5)
-i = 0
+
 # Let's us continue until the program is halted (Not needed in our case, but as an example)
 while 1:
 	# Accept incoming connections to our port
