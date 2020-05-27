@@ -16,18 +16,18 @@ s.bind(saddr)
 # listen defines our connection limit
 s.listen(5)
 i = 0
-# Let's us continue until the program is halted
+# Let's us continue until the program is halted (Not needed in our case, but as an example)
 while 1:
 	# Accept incoming connections to our port
 	clientsocket, address = s.accept()
 	# List who has connected as a client. 'f' let's us call variables
-	print(f"Client {address} has entered chat")
+	print(f"Client {address} has entered {sname}'s chat server")
 	# Send a message to the client
-	clientsocket.send(bytes(f"Welcome to {sname}'s server", "utf-8"))
-	i += 1
-	# Close server
-	if i > 2:
-		break
+	clientsocket.send(bytes(f"Welcome to {sname}'s server, {address[0]}", "utf-8"))
+	# Disconnect the client from the server
+	clientsocket.close()
+	# Turn off the Server (Create other conditions for actual server)
+	break
 
 # Safe shutdown for the socket
 #try:
