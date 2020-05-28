@@ -4,6 +4,7 @@ import socket
 import select
 import errno
 import sys
+from datetime import datetime as dt
 
 # Initial variables:
 HL = 10             # Header length/size
@@ -46,6 +47,8 @@ while True:
         sys.exit()
     # Returns true if a message was typed. Otherwise refreshes
     if message:
+        # Adding timestamp for recordkeeping
+        message = str(dt.now()).split('.')[0] + " : " + message
         message = message.encode('utf-8')
         messageH = f"{len(message) :< {HL}}".encode('utf-8')
         s.send(messageH + message)
