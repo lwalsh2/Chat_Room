@@ -1,10 +1,9 @@
 # Client half of the code, meant to connect and communicate with server
 # importing socket library to utilize sockets for communication
-import socket
-import select
-import errno
-import sys
-from datetime import datetime as dt
+import socket # Utilize sockets for connections
+import errno  # Error handling
+import sys    # Alllow for breaks
+from datetime import datetime as dt # TImestamps for messages (haven't made Zulu yet)
 
 # Initial variables:
 HL = 10                 # Header length/size

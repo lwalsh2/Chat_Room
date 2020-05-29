@@ -1,7 +1,7 @@
 # Server half of the code, meant to connect and communicate with clients
 # importing socket library to utilize sockets for communication
-import socket
-import select
+import socket # Utilize sockets for connections
+import select # Specifically select.select()
 
 HL = 10                 # Header length/size
 sname = "192.168.0.3"   # Change to your IP
