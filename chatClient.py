@@ -7,10 +7,10 @@ import sys
 from datetime import datetime as dt
 
 # Initial variables:
-HL = 10             # Header length/size
-sname = "127.0.0.1" # Add the Server's IP here
-sport = 1234        # Add the server's port here
-saddr = (sname, sport) # Makes connect command easier to look at
+HL = 10                 # Header length/size
+sname = "192.168.0.3"   # Add the Server's IP here
+sport = 80              # Add the server's port here (Unused is better)
+saddr = (sname, sport)  # Makes connect command easier to look at
 
 
 # Initializing socket:

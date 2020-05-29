@@ -3,9 +3,9 @@
 import socket
 import select
 
-HL = 10
-sname = "127.0.0.1" # Change to your IP
-sport = 1234		# Edit to be the port of your choosing
+HL = 10                 # Header length/size
+sname = "192.168.0.3"   # Change to your IP
+sport = 80		        # Edit to be the port of your choosing
 saddr = (sname, sport)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
