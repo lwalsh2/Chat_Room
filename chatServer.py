@@ -2,9 +2,10 @@
 # importing socket library to utilize sockets for communication
 import socket # Utilize sockets for connections
 import select # Specifically select.select()
+#from datetime import datetime as dt # TImestamps for messages (Still implementing)
 
 HL = 10                 # Header length/size
-sname = "192.168.0.3"   # Change to your IP
+sname = "127.0.0.1"   # Change to your IP "192.168.0.3"
 sport = 80		        # Edit to be the port of your choosing
 saddr = (sname, sport)
 
@@ -22,6 +23,7 @@ def receive_message(client_socket):
 		if not len(message_header):
 			return False
 		message_length = int(message_header.decode("utf-8").strip())
+
 		return{"header": message_header, "data": client_socket.recv(message_length)}
 	# Broken script
 	except:
