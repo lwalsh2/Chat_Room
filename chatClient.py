@@ -3,11 +3,11 @@
 import socket # Utilize sockets for connections
 import errno  # Error handling
 import sys    # Alllow for breaks
-from datetime import datetime as dt # TImestamps for messages
+from datetime import datetime as dt # TImestamps for messages (haven't made Zulu yet)
 
 # Initial variables:
 HL = 10                 # Header length/size
-sname = "127.0.0.1"     # Add the Server's IP here "192.168.0.3"
+sname = "192.168.0.3"   # Add the Server's IP here
 sport = 80              # Add the server's port here (Unused is better)
 saddr = (sname, sport)  # Makes connect command easier to look at
 
@@ -65,13 +65,11 @@ while True:
             messageL = int(messageH.decode('utf-8').strip())
             message = s.recv(messageL).decode('utf-8')
             print(f"{uname} > {message}")
-    # EAGAIN and EWOULDBLOCK errors are expected
     except IOError as e:
         if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
             print('Reading error', str(e))
             sys.exit()
         continue
-    # Other Errors
     except Exception as e:
         print('General error', str(e))
         sys.exit()
@@ -86,7 +84,7 @@ import socket
 header = 10
 # s is defined as our client socket for communication
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# AF_INET refers to the IPv4
+# AF_INET refers to the IPv4, and SOCK_STREAM allows for ___
 s.connect((socket.gethostname(), 1234))
 
 # Create a var to print off small or large messages
