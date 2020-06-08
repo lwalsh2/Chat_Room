@@ -9,10 +9,10 @@ def connect(saddr):
     # Initializing socket:
     # AF_INET refers to Internet Address Family, allowing for outside connections
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	# Allow for reuse/reconnect of port
-	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-	s.bind(saddr)
-	s.listen()
+    # Allow for reuse/reconnect of port
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(saddr)
+    s.listen()
     return s
 
 def client_left(exception_sockets, socklist, clients):
@@ -35,7 +35,7 @@ def receive_message(client_socket):
 		return False
 
 # Accept and comminicate with clients
-def run_server():
+def run_server(s):
 	# initialize client socket lists
 	socklist = [s]
 	clients = {}
