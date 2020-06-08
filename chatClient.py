@@ -76,7 +76,7 @@ def chat(s, name, uname, unameH):
 
 def main():
     # Ask for user input for server information, then try to connect
-    s, name, uname, unameH = connect((input("Server IP: "), int(input("Server Port: "))))
+    s = connect((input("Server IP: "), int(input("Server Port: "))))
     name, uname, unameH = username(s)
     chat(s, name, uname, unameH)
 
