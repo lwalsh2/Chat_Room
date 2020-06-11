@@ -74,6 +74,7 @@ def run_server(s):
 		exception_sockets, socklist, clients = client_left(exception_sockets, socklist, clients)
 
 def main():
+    # Ask for user input for server information, then try to connect
 	s = connect((input("Server IP: "), int(input("Server Port: "))))
 	run_server(s)
 

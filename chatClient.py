@@ -4,6 +4,7 @@ import socket # Utilize sockets for connections
 import errno  # Error handling
 import sys    # Alllow for breaks
 from datetime import datetime as dt # TImestamps for messages (haven't made Zulu yet)
+import asyncio
 
 HL = 10                 # Header length/size
 
@@ -31,7 +32,7 @@ def username(s):
     return name, uname, unameH
 
 # Proceed to chat with server
-def chat(s, name, uname, unameH):
+async def chat(s, name, uname, unameH):
     # Initial Message in chat
     print("You are in the chat server. Use !quit to exit, enter to send/refresh messages")
     # Looping Messages/Messaging
@@ -49,6 +50,10 @@ def chat(s, name, uname, unameH):
             message = message.encode('utf-8')
             messageH = f"{len(message) :< {HL}}".encode('utf-8')
             s.send(messageH + message)
+
+# Listen to Server for Chat messages
+async def listen(s, name, uname, unameH):
+    while True:
         # Receiving Messages (expected IOerrors)
         try:
             while True:
@@ -73,11 +78,23 @@ def chat(s, name, uname, unameH):
             sys.exit()
 
 
-def main():
+async def main():
     # Ask for user input for server information, then try to connect
     s = connect((input("Server IP: "), int(input("Server Port: "))))
     name, uname, unameH = username(s)
-    chat(s, name, uname, unameH)
+    
+    #async1 = loop.create_task(chat(s, name, uname, unameH))
+    #async2 = loop.create_task(listen(s, name, uname, unameH))
+    await asyncio.wait([async1, async2])
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
+'''
+    try:
+        runTogether = asyncio.get_event_loop()
+        runTogether.run_until_complete(main())
+    except Exception as e:
+        pass
+    finally:
+        runTogether.close()
+'''
