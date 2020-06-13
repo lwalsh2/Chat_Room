@@ -32,7 +32,7 @@ def username(s):
     return name, uname, unameH
 
 # Proceed to chat with server
-async def chat(s, name, uname, unameH):
+def chat(s, name, uname, unameH):
     # Initial Message in chat
     print("You are in the chat server. Use !quit to exit, enter to send/refresh messages")
     # Looping Messages/Messaging
@@ -52,7 +52,7 @@ async def chat(s, name, uname, unameH):
             s.send(messageH + message)
 
 # Listen to Server for Chat messages
-async def listen(s, name, uname, unameH):
+def listen(s, name, uname, unameH):
     while True:
         # Receiving Messages (expected IOerrors)
         try:
@@ -78,23 +78,13 @@ async def listen(s, name, uname, unameH):
             sys.exit()
 
 
-async def main():
+def main():
     # Ask for user input for server information, then try to connect
     s = connect((input("Server IP: "), int(input("Server Port: "))))
     name, uname, unameH = username(s)
-    
-    #async1 = loop.create_task(chat(s, name, uname, unameH))
-    #async2 = loop.create_task(listen(s, name, uname, unameH))
-    await asyncio.wait([async1, async2])
+    chat(s, name, uname, unameH)
+    listen(s, name, uname, unameH)
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
-'''
-    try:
-        runTogether = asyncio.get_event_loop()
-        runTogether.run_until_complete(main())
-    except Exception as e:
-        pass
-    finally:
-        runTogether.close()
-'''
+    main()
