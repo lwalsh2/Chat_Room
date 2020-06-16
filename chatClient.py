@@ -4,7 +4,6 @@ import socket # Utilize sockets for connections
 import errno  # Error handling
 import sys    # Alllow for breaks
 from datetime import datetime as dt # TImestamps for messages (haven't made Zulu yet)
-import asyncio
 
 HL = 10                 # Header length/size
 
