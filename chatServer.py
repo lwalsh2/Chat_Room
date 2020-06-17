@@ -2,8 +2,20 @@
 # importing socket library to utilize sockets for communication
 import socket # Utilize sockets for connections
 import select # Specifically select.select()
+from cryptography.fernet import Fernet # Encryption
 
-HL = 10                 # Header length/size
+# Header length/size
+HL = 10
+
+
+# Create and write a key for encryption
+def create_key():
+    key = Fernet.generate_key()
+    print(f"Your current key is: {key}")
+    file = open('Definitely_Not_the_Key', 'wb')
+    file.write(key)
+    file.close()
+    return key
 
 def connect(saddr):
     # Initializing socket:
@@ -13,6 +25,7 @@ def connect(saddr):
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(saddr)
     s.listen()
+    print("Successfully bound IP and Port")
     return s
 
 def client_left(exception_sockets, socklist, clients):
@@ -28,14 +41,14 @@ def receive_message(client_socket):
 		message_header = client_socket.recv(HL)
 		if not len(message_header):
 			return False
-		message_length = int(message_header.decode("utf-8").strip())
+		message_length = int(message_header.decode('utf-8').strip())
 		return{"header": message_header, "data": client_socket.recv(message_length)}
 	# Broken script
 	except:
 		return False
 
 # Accept and comminicate with clients
-def run_server(s):
+def run_server(s, key):
 	# initialize client socket lists
 	socklist = [s]
 	clients = {}
@@ -65,7 +78,7 @@ def run_server(s):
 					del clients[notified_socket]
 					continue
 				user = clients[notified_socket]
-				print(f"Received message from {user['data'].decode('utf-8')}: {message['data'].decode('utf-8')}")
+				print(f"Received message from {user['data'].decode('utf-8')}: {Fernet(key).decrypt(message['data']).decode('utf-8')}")
 				# Post message to other clients
 				for client_socket in clients:
 					if client_socket != notified_socket:
@@ -76,7 +89,7 @@ def run_server(s):
 def main():
     # Ask for user input for server information, then try to connect
 	s = connect((input("Server IP: "), int(input("Server Port: "))))
-	run_server(s)
+	run_server(s, create_key())
 
 if __name__ == "__main__":
     main()
