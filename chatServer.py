@@ -1,12 +1,15 @@
 # Server half of the code, meant to connect and communicate with clients
 # importing socket library to utilize sockets for communication
+# Host to network (HTON, Network to Host)
+# Wire Protocol
+# C: thread that accepts, thread per client
+# Exit, how to shut down (Next thrusday 1600)
 import socket # Utilize sockets for connections
 import select # Specifically select.select()
 from cryptography.fernet import Fernet # Encryption
 
 # Header length/size
 HL = 10
-
 
 # Create and write a key for encryption
 def create_key():
@@ -17,16 +20,17 @@ def create_key():
     file.close()
     return key
 
+# Bind, Listen, Accept, Begin -- Change s name, and try except
 def connect(saddr):
     # Initializing socket:
     # AF_INET refers to Internet Address Family, allowing for outside connections
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Allow for reuse/reconnect of port
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind(saddr)
-    s.listen()
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind(saddr)
+    server_socket.listen()
     print("Successfully bound IP and Port")
-    return s
+    return server_socket
 
 def client_left(exception_sockets, socklist, clients):
 	# Remove exiting sockets
@@ -47,10 +51,10 @@ def receive_message(client_socket):
 	except:
 		return False
 
-# Accept and comminicate with clients
-def run_server(s, key):
+# Accept and comminicate with clients -- No signle-nomatic variables
+def run_server(server_socket, key):
 	# initialize client socket lists
-	socklist = [s]
+	socklist = [server_socket]
 	clients = {}
 	while True:
 		# Accept/Post read sockets, and delete exception sockets (incoming and leaving)
@@ -58,8 +62,8 @@ def run_server(s, key):
 		# Go through sockets
 		for notified_socket in read_sockets:
 			# Socket is incoming client
-			if notified_socket == s:
-				client_socket, client_address = s.accept()
+			if notified_socket == server_socket:
+				client_socket, client_address = server_socket.accept()
 				# Receive the username
 				user = receive_message(client_socket)
 				# If no name, or error, skip
@@ -88,8 +92,8 @@ def run_server(s, key):
 
 def main():
     # Ask for user input for server information, then try to connect
-	s = connect((input("Server IP: "), int(input("Server Port: "))))
-	run_server(s, create_key())
+	server_socket = connect((input("Server IP: "), int(input("Server Port: "))))
+	run_server(server_socket, create_key())
 
 if __name__ == "__main__":
     main()

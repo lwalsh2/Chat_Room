@@ -6,7 +6,7 @@ import sys    # Alllow for breaks
 from datetime import datetime as dt # Timestamps for messages (haven't made Zulu yet)
 from cryptography.fernet import Fernet # Encryption
 
-# Header length/siz
+# Header length/size
 HL = 10
 
 # Grab key for encryption
