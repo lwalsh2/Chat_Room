@@ -44,7 +44,7 @@ def username(client_socket):
 		username_length = f"{len(encoded_username):<{10}}".encode('utf-8')
 		# Sending username to server to track (0 for add user, 1 for send message)
 		client_socket.send(username_length + encoded_username)
-		print(f"Protocol Sent: {username_length + encoded_username}")
+		# print(f"Protocol Sent: {username_length + encoded_username}")
 		return username
 	except Exception as error_message:
 		print('General error', str(error_message))
@@ -55,46 +55,47 @@ def chat(client_socket, name, key):
 	# Initial Message in chat
 	print("You are in the chat server. Use !quit to exit, enter to send/refresh messages")
 	# Looping Messages/Messaging
-	while True:
-		# Enter message to send to chat (enter to refresh chat log)
-		message = input(f"{name} > ")
-		# Provide a quit function
-		if message == "!quit":
-			print("Leaving Chat. Goodbye!")
-			sys.exit()
-		# Returns true if a message was typed. Otherwise refreshes
-		if message:
-			# Adding timestamp for recordkeeping
-			message = str(datetime.now()).split('.')[0] + " : " + message
-			# Encode for transport
-			message = message.encode('utf-8')
-			# Encrypt for security
-			message = Fernet(key).encrypt(message)
-			message_length = f"{len(message) :< {10}}".encode('utf-8')
-			client_socket.send(message_length + message)
-			print(f"Protocol Sent: {message_length + message}")
-		# Receiving Messages (expected IOerrors)
-		try:
-			while True:
-				# Receive messages
-				junk = client_socket.recv(1)
-				username_length = client_socket.recv(10)
-				if not len(username_length):
-					print("Connection closed by server")
-					sys.exit()
-				message_length = int(client_socket.recv(10).decode('utf-8').strip())
-				username = client_socket.recv(int(username_length.decode('utf-8').strip())).decode('utf-8')
-				# Decode to readable string
-				message = Fernet(key).decrypt(client_socket.recv(message_length)).decode('utf-8')
-				print(f"{username} > {message}")
-		except IOError as e:
-			if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
-				print('Reading error', str(e))
+	try:
+		while True:
+			# Enter message to send to chat (enter to refresh chat log)
+			message = input(f"{name} > ")
+			# Provide a quit function
+			if message == "!quit":
+				print("Leaving Chat. Goodbye!")
 				sys.exit()
-			continue
-		except Exception as error_message:
-			print('General error', str(error_message))
-			sys.exit()
+			# Returns true if a message was typed. Otherwise refreshes
+			if message:
+				# Adding timestamp for recordkeeping
+				message = str(datetime.now()).split('.')[0] + " : " + message
+				# Encode for transport
+				message = message.encode('utf-8')
+				# Encrypt for security
+				message = Fernet(key).encrypt(message)
+				message_length = f"{len(message) :< {10}}".encode('utf-8')
+				client_socket.send(message_length + message)
+				# print(f"Protocol Sent: {message_length + message}")
+			# Receiving Messages (expected IOerrors)
+			try:
+				while True:
+					# Receive messages
+					junk = client_socket.recv(1)
+					username_length = client_socket.recv(10)
+					if not len(username_length):
+						print("Connection closed by server")
+						sys.exit()
+					message_length = int(client_socket.recv(10).decode('utf-8').strip())
+					username = client_socket.recv(int(username_length.decode('utf-8').strip())).decode('utf-8')
+					# Decode to readable string
+					message = Fernet(key).decrypt(client_socket.recv(message_length)).decode('utf-8')
+					print(f"{username} > {message}")
+			except IOError as e:
+				if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
+					print('Reading error', str(e))
+					sys.exit()
+				continue
+	except Exception as error_message:
+		print('General error', str(error_message))
+		sys.exit()
 
 def main():
 	# Ask for user input for server information, then try to connect
