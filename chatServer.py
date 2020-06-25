@@ -8,7 +8,6 @@ import socket # Utilize sockets for connections
 import select # Specifically select.select()
 import signal # Allow for closing the server
 import sys	# Alllow for breaks
-import asyncio # Allow for CTRL-C
 from cryptography.fernet import Fernet # Encryption
 
 # Create and write a key for encryption
