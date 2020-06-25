@@ -1,8 +1,7 @@
 # Server half of the code, meant to connect and communicate with clients
 # importing socket library to utilize sockets for communication
 # Host to network (HTON, Network to Host)
-# Wire Protocol
-# C: thread that accepts, thread per client
+# Wire Protocol idea for C: thread that accepts, thread per client
 # Exit, how to shut down (Next thrusday 1600)
 import socket # Utilize sockets for connections
 import select # Specifically select.select()
