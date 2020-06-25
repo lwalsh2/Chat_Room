@@ -7,4 +7,4 @@ Client Imports:
 	socket, errno, sys, datetime, cryptography.fernet
 
 Server Imports:
-	socket, select, signal, sys, cryptography.fernet
+	socket, select, sys, cryptography.fernet

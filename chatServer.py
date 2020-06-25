@@ -5,7 +5,6 @@
 # Exit, how to shut down (Next thrusday 1600)
 import socket # Utilize sockets for connections
 import select # Specifically select.select()
-import signal # Allow for closing the server
 import sys	# Alllow for breaks
 from cryptography.fernet import Fernet # Encryption
 
@@ -116,21 +115,6 @@ def run_server(server_socket, key):
 		print('General error', str(error_message))
 		sys.exit()
 
-'''
-async def await_inevitable():
-	print("I am inevitable")
-	# Receive client input
-	try:
-		while True:
-			await asyncio.sleep(1)
-	except KeyboardInterrupt:
-		print("Goodbye")
-		sys.exit()
-	except Exception as error_message:
-		print('General error', str(error_message))
-		sys.exit()
-'''
-
 def main():
 	# Ask for user input for server information, then try to connect
 	# print("in main")
@@ -140,8 +124,5 @@ def main():
 
 if __name__ == "__main__":
 	# print("in _name_")
-	# signal.signal(signal.SIGINT, sys.exit())
 	print("Welcome to the Chat Server!\nIf you wish to exit at any time, use CTRL-C.\nFill out following to start:")
 	main()
-	# async_run = asyncio.get_event_loop()
-	# async_run.run_until_complete(main())
