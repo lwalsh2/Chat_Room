@@ -22,19 +22,19 @@ def connect(saddr):
 	try:
 		# Initializing socket:
 		# AF_INET refers to Internet Address Family, allowing for outside connections
-		client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		# Reaching out to the server for a connection
-		client_socket.connect(saddr)
+		server_socket.connect(saddr)
 		print("Successfully Connected!")
 		# Allows for recv to work unhindered
-		client_socket.setblocking(False)
-		return client_socket
+		server_socket.setblocking(False)
+		return server_socket
 	except Exception as error_message:
 		print('General error', str(error_message))
 		sys.exit()
 
 # Create and send username to server
-def username(client_socket):
+def username(server_socket):
 	try:
 		# Create a name for yourself within the server
 		username = input("Username: ")
@@ -43,7 +43,7 @@ def username(client_socket):
 		# Header protocol
 		username_length = f"{len(encoded_username):<{10}}".encode('utf-8')
 		# Sending username to server to track (0 for add user, 1 for send message)
-		client_socket.send(username_length + encoded_username)
+		server_socket.send(username_length + encoded_username)
 		# print(f"Protocol Sent: {username_length + encoded_username}")
 		return username
 	except Exception as error_message:
@@ -51,7 +51,7 @@ def username(client_socket):
 		sys.exit()
 
 # Proceed to chat with server
-def chat(client_socket, name, key):
+def chat(server_socket, name, key):
 	# Initial Message in chat
 	print("You are in the chat server. Use !quit to exit, enter to send/refresh messages")
 	# Looping Messages/Messaging
@@ -72,21 +72,21 @@ def chat(client_socket, name, key):
 				# Encrypt for security
 				message = Fernet(key).encrypt(message)
 				message_length = f"{len(message) :< {10}}".encode('utf-8')
-				client_socket.send(message_length + message)
+				server_socket.send(message_length + message)
 				# print(f"Protocol Sent: {message_length + message}")
 			# Receiving Messages (expected IOerrors)
 			try:
 				while True:
 					# Receive messages
-					junk = client_socket.recv(1)
-					username_length = client_socket.recv(10)
+					junk = server_socket.recv(1)
+					username_length = server_socket.recv(10)
 					if not len(username_length):
 						print("Connection closed by server")
 						sys.exit()
-					message_length = int(client_socket.recv(10).decode('utf-8').strip())
-					username = client_socket.recv(int(username_length.decode('utf-8').strip())).decode('utf-8')
+					message_length = int(server_socket.recv(10).decode('utf-8').strip())
+					username = server_socket.recv(int(username_length.decode('utf-8').strip())).decode('utf-8')
 					# Decode to readable string
-					message = Fernet(key).decrypt(client_socket.recv(message_length)).decode('utf-8')
+					message = Fernet(key).decrypt(server_socket.recv(message_length)).decode('utf-8')
 					print(f"{username} > {message}")
 			except IOError as e:
 				if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
@@ -99,9 +99,9 @@ def chat(client_socket, name, key):
 
 def main():
 	# Ask for user input for server information, then try to connect
-	client_socket = connect((input("Server IP: "), int(input("Server Port: "))))
-	name = username(client_socket)
-	chat(client_socket, name, read_key())
+	server_socket = connect((input("Server IP: "), int(input("Server Port: "))))
+	name = username(server_socket)
+	chat(server_socket, name, read_key())
 
 
 if __name__ == "__main__":

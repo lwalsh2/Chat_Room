@@ -25,7 +25,8 @@ def create_key():
 def connect(saddr):
 	try:
 		# Initializing socket:
-		# AF_INET refers to Internet Address Family, allowing for outside connections
+		# AF_INET refers to Internet Address Family, (specifically IPv4) allowing for outside connections
+		# SOCK_STREAM refers to TCP Connection (DGRAM for UDP)
 		server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		# Allow for reuse/reconnect of port
 		server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
