@@ -3,8 +3,8 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
-// #include <string.h>
 
+// Socket builder method
 struct sockaddr_in create_struct(int port){
 	struct sockaddr_in server_struct;
 	server_struct.sin_family = AF_INET; // IPv4
@@ -26,10 +26,11 @@ int main() {
 	connect(client_socket, (struct sockaddr *)&server_struct, sizeof(server_struct));
 
 	// Receive from server
-	char message[256] = "Failed to receive";
-	int wasRecv = recv(client_socket, &message, sizeof(message), 0);
-	printf("Message from Server: %s\n", &message);
-	printf("Was Recv: %i\n", wasRecv);
+	char message[256] = "";
+	int wasRecv = recv(client_socket, message, sizeof(message), 0);
+	printf("%s", message);
+
+	printf("\nFinished\n");
 
 	return 0;
 }
