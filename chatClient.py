@@ -34,18 +34,16 @@ def connect(saddr):
 		sys.exit()
 
 # Create and send username to server
-def username(client_socket):
+def username(client_socket, name):
 	try:
-		# Create a name for yourself within the server
-		username = input("Username: ")
 		# Encode username for server to read
-		encoded_username = username.encode('utf-8')
+		encoded_name = name.encode('utf-8')
 		# Header protocol
-		username_length = f"{len(encoded_username):<{10}}".encode('utf-8')
+		name_length = f"{len(encoded_name):<{10}}".encode('utf-8')
 		# Sending username to server to track (0 for add user, 1 for send message)
-		client_socket.send(username_length + encoded_username)
+		client_socket.send(name_length + encoded_name)
 		# print(f"Protocol Sent: {username_length + encoded_username}")
-		return username
+		return name
 	except Exception as error_message:
 		print('General error', str(error_message))
 		sys.exit()
@@ -97,10 +95,22 @@ def chat(client_socket, name, key):
 		print('General error', str(error_message))
 		sys.exit()
 
+# Accepts Parameters of IP, Port and Username
+# (i.e. py chatClient 192.168.0.1 80 Bob)
 def main():
-	# Ask for user input for server information, then try to connect
-	client_socket = connect((input("Server IP: "), int(input("Server Port: "))))
-	name = username(client_socket)
+	if (len(sys.argv) > 3):
+		client_socket = connect((sys.argv[1], int(sys.argv[2])))
+		name = username(client_socket, sys.argv[3])
+	elif (len(sys.argv) > 2):
+		client_socket = connect((sys.argv[1], int(sys.argv[2])))
+		name = username(client_socket, input("Username: "))
+	elif (len(sys.argv) > 1):
+		client_socket = connect((sys.argv[1], int(input("Server Port: "))))
+		name = username(client_socket, input("Username: "))
+	else:
+		# Ask for user input for server information, then try to connect
+		client_socket = connect((input("Server IP: "), int(input("Server Port: "))))
+		name = username(client_socket, input("Username: "))
 	chat(client_socket, name, read_key())
 
 
