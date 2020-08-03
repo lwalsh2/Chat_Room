@@ -4,13 +4,13 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+
 // Socket builder method
-struct sockaddr_in create_struct(int port){
-	struct sockaddr_in server_struct;
-	server_struct.sin_family = AF_INET; // IPv4
-	server_struct.sin_addr.s_addr = INADDR_ANY; // shortcut for self
-	server_struct.sin_port = htons( port );
-	return server_struct;
+size_t create_struct(int port, struct sockaddr_in *struct_ptr){
+	(*struct_ptr).sin_family = AF_INET; // IPv4
+	(*struct_ptr).sin_addr.s_addr = INADDR_ANY; // shortcut for self
+	(*struct_ptr).sin_port = htons( port );
+	return sizeof(*struct_ptr);
 }
 
 
@@ -28,8 +28,10 @@ int main() {
 
 	// Create socket address struct
 	printf("Creating Struct\n");
-	struct sockaddr_in server_struct = create_struct(1234);
-	int struct_length = sizeof(server_struct);
+	// Defining socket
+	struct sockaddr_in server_struct;
+	struct sockaddr_in *struct_ptr = &server_struct;
+	size_t struct_length = create_struct(1234, struct_ptr);
 
 	// Bind the socket to IP address and Port
 	printf("Binding socket\n");
