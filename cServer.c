@@ -42,10 +42,10 @@ int main() {
 
 	// Declare variables for incoming clients
 	int client_socket;
+	// Listen for incoming clients (backhaul of 5)
+	listen(server_socket, 5);
 	// Loop Listen-Accept-Send commands. Can be CTRL-C'd out
 	while(1) {
-		// Listen for incoming clients (backhaul of 5)
-		listen(server_socket, 5);
 		// Accept incoming client (Was the cause of earlier issue)
 		if ((client_socket = accept(server_socket, (struct sockaddr *)&server_struct, (socklen_t*)&struct_length))<0)
     {
