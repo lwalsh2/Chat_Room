@@ -39,7 +39,7 @@ def username(client_socket, name):
 		# Encode username for server to read
 		encoded_name = name.encode('utf-8')
 		# Header protocol
-		name_length = f"{len(encoded_name):<{10}}".encode('utf-8')
+		name_length = len(encoded_name).to_bytes(4, 'big')
 		# Sending username to server to track (0 for add user, 1 for send message)
 		client_socket.send(name_length + encoded_name)
 		# print(f"Protocol Sent: {username_length + encoded_username}")
@@ -69,20 +69,19 @@ def chat(client_socket, name, key):
 				message = message.encode('utf-8')
 				# Encrypt for security
 				message = Fernet(key).encrypt(message)
-				message_length = f"{len(message) :< {10}}".encode('utf-8')
+				message_length = len(message).to_bytes(4, 'big')
 				client_socket.send(message_length + message)
 				# print(f"Protocol Sent: {message_length + message}")
 			# Receiving Messages (expected IOerrors)
 			try:
 				while True:
 					# Receive messages
-					junk = client_socket.recv(1)
-					username_length = client_socket.recv(10)
+					username_length = client_socket.recv(4)
 					if not len(username_length):
 						print("Connection closed by server")
 						sys.exit()
-					message_length = int(client_socket.recv(10).decode('utf-8').strip())
-					username = client_socket.recv(int(username_length.decode('utf-8').strip())).decode('utf-8')
+					message_length = int.from_bytes(client_socket.recv(4), 'big')
+					username = client_socket.recv(int.from_bytes(username_length, 'big')).decode('utf-8')
 					# Decode to readable string
 					message = Fernet(key).decrypt(client_socket.recv(message_length)).decode('utf-8')
 					print(f"{username} > {message}")

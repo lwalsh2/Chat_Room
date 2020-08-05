@@ -52,10 +52,12 @@ def client_left(exception_sockets, socket_list, client_names):
 # Receive client input
 def receive_data(client_socket):
 	try:
-		# print("I am in receive_message")
-		message_header = client_socket.recv(10)
+		#print("I am in receive_message")
+		message_header = client_socket.recv(4)
+		#print(message_header)
+		#print(int.from_bytes(message_header, 'big'))
 		if len(message_header): # No user
-			message_length = int(message_header.decode('utf-8').strip())
+			message_length = int.from_bytes(message_header, 'big')
 			return{"length": message_header, "data": client_socket.recv(message_length)}
 		return False
 	except Exception: # No user
@@ -88,13 +90,6 @@ def run_server(server_socket, key):
 
 				# Socket is client posting message
 				else:
-					'''
-					a = client_socket.recv(1)
-					if a != b'0':
-						print("False message")
-						print(a)
-						continue
-					'''
 					message = receive_data(notified_socket)
 					if message is False:
 						print(f"Closed connection from {client_names[notified_socket]['data'].decode('utf-8')}")
@@ -106,7 +101,7 @@ def run_server(server_socket, key):
 					# Post message to other clients
 					for client_socket in client_names:
 						if client_socket != notified_socket:
-							client_socket.send(b'1' + user['length'] + message['length'] + user['data'] + message['data'])
+							client_socket.send(user['length'] + message['length'] + user['data'] + message['data'])
 			# Remove exiting clients
 			exception_sockets, socket_list, client_names = client_left(exception_sockets, socket_list, client_names)
 	except KeyboardInterrupt:
@@ -119,6 +114,10 @@ def run_server(server_socket, key):
 # Accepts Parameters of IP and Port
 # (i.e. py chatServer 192.168.0.1 80)
 def main():
+	'''
+	for argument in sys.argv[1:]:
+		if argument
+	'''
 	if (len(sys.argv) > 2):
 		server_socket = connect((sys.argv[1], int(sys.argv[2])))
 		run_server(server_socket, create_key())
