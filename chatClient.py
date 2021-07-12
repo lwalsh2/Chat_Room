@@ -34,18 +34,16 @@ def connect(saddr):
 		sys.exit()
 
 # Create and send username to server
-def username(client_socket):
+def username(client_socket, name):
 	try:
-		# Create a name for yourself within the server
-		username = input("Username: ")
 		# Encode username for server to read
-		encoded_username = username.encode('utf-8')
+		encoded_name = name.encode('utf-8')
 		# Header protocol
-		username_length = f"{len(encoded_username):<{10}}".encode('utf-8')
+		name_length = len(encoded_name).to_bytes(4, 'big')
 		# Sending username to server to track (0 for add user, 1 for send message)
-		client_socket.send(username_length + encoded_username)
+		client_socket.send(name_length + encoded_name)
 		# print(f"Protocol Sent: {username_length + encoded_username}")
-		return username
+		return name
 	except Exception as error_message:
 		print('General error', str(error_message))
 		sys.exit()
@@ -71,20 +69,19 @@ def chat(client_socket, name, key):
 				message = message.encode('utf-8')
 				# Encrypt for security
 				message = Fernet(key).encrypt(message)
-				message_length = f"{len(message) :< {10}}".encode('utf-8')
+				message_length = len(message).to_bytes(4, 'big')
 				client_socket.send(message_length + message)
 				# print(f"Protocol Sent: {message_length + message}")
 			# Receiving Messages (expected IOerrors)
 			try:
 				while True:
 					# Receive messages
-					junk = client_socket.recv(1)
-					username_length = client_socket.recv(10)
+					username_length = client_socket.recv(4)
 					if not len(username_length):
 						print("Connection closed by server")
 						sys.exit()
-					message_length = int(client_socket.recv(10).decode('utf-8').strip())
-					username = client_socket.recv(int(username_length.decode('utf-8').strip())).decode('utf-8')
+					message_length = int.from_bytes(client_socket.recv(4), 'big')
+					username = client_socket.recv(int.from_bytes(username_length, 'big')).decode('utf-8')
 					# Decode to readable string
 					message = Fernet(key).decrypt(client_socket.recv(message_length)).decode('utf-8')
 					print(f"{username} > {message}")
@@ -97,10 +94,22 @@ def chat(client_socket, name, key):
 		print('General error', str(error_message))
 		sys.exit()
 
+# Accepts Parameters of IP, Port and Username
+# (i.e. py chatClient 192.168.0.1 80 Bob)
 def main():
-	# Ask for user input for server information, then try to connect
-	client_socket = connect((input("Server IP: "), int(input("Server Port: "))))
-	name = username(client_socket)
+	if (len(sys.argv) > 3):
+		client_socket = connect((sys.argv[1], int(sys.argv[2])))
+		name = username(client_socket, sys.argv[3])
+	elif (len(sys.argv) > 2):
+		client_socket = connect((sys.argv[1], int(sys.argv[2])))
+		name = username(client_socket, input("Username: "))
+	elif (len(sys.argv) > 1):
+		client_socket = connect((sys.argv[1], int(input("Server Port: "))))
+		name = username(client_socket, input("Username: "))
+	else:
+		# Ask for user input for server information, then try to connect
+		client_socket = connect((input("Server IP: "), int(input("Server Port: "))))
+		name = username(client_socket, input("Username: "))
 	chat(client_socket, name, read_key())
 
 
