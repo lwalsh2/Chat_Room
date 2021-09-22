@@ -28,8 +28,8 @@ def read_key():
         file = open('Definitely_Not_the_Key', 'rb')
         print("Successfully retrieved key")
         return file.read()
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except OSError as error_message:
+        print('File Error: ', str(error_message))
         sys.exit()
 
 
@@ -56,8 +56,8 @@ def connect(s_address):
         # Allows for receive to work unhindered
         client_socket.setblocking(False)
         return client_socket
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except socket.error as error_message:
+        print('Socket Error: ', str(error_message))
         sys.exit()
 
 
@@ -84,8 +84,8 @@ def username(client_socket, name):
         client_socket.send(name_length + encoded_name)
         # print(f"Protocol Sent: {username_length + encoded_username}")
         return name
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except socket.error as error_message:
+        print('Socket Error: ', str(error_message))
         sys.exit()
 
 
@@ -142,8 +142,8 @@ def chat(client_socket, name, key):
                     print('Reading error', str(e))
                     sys.exit()
                 continue
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except socket.error as error_message:
+        print('Socket Error: ', str(error_message))
         sys.exit()
 
 

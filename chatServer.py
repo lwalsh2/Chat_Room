@@ -31,8 +31,8 @@ def create_key():
         file.write(key)
         file.close()
         return key
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except OSError as error_message:
+        print('File Error: ', str(error_message))
         sys.exit()
 
 
@@ -52,8 +52,8 @@ def connect(s_address):
         server_socket.listen()
         print("Successfully bound IP and Port")
         return server_socket
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except socket.error as error_message:
+        print('Socket Error: ', str(error_message))
         sys.exit()
 
 
@@ -72,8 +72,8 @@ def client_left(exception_sockets, socket_list, client_names):
             socket_list.remove(notified_socket)
             del client_names[notified_socket]
         return exception_sockets, socket_list, client_names
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except socket.error as error_message:
+        print('Socket Error: ', str(error_message))
         sys.exit()
 
 
@@ -88,7 +88,7 @@ def receive_data(client_socket):
             return{"length": message_header,
                    "data": client_socket.recv(message_length)}
         return False
-    except Exception:
+    except socket.error:
         # No user
         return False
 
@@ -129,15 +129,16 @@ def run_server(server_socket, key):
                 else:
                     message = receive_data(notified_socket)
                     if message is False:
-                        print(f"Closed connection from ",
-                              f"{client_names[notified_socket]['data'].decode('utf-8')}")
+                        user = client_names[notified_socket]['data']
+                        print(f"Closed connection from {user.decode('utf-8')}")
                         socket_list.remove(notified_socket)
                         del client_names[notified_socket]
                         continue
                     user = client_names[notified_socket]
+                    user_message = Fernet(key).decrypt(message['data'])
                     print(f"Received message from ",
-                      f"{user['data'].decode('utf-8')}: ",
-                      f"{Fernet(key).decrypt(message['data']).decode('utf-8')}")
+                          f"{user['data'].decode('utf-8')}: ",
+                          f"{user_message.decode('utf-8')}")
                     # Post message to other clients
                     for client_socket in client_names:
                         if client_socket != notified_socket:
@@ -150,8 +151,8 @@ def run_server(server_socket, key):
     except KeyboardInterrupt:
         print("Goodbye")
         sys.exit()
-    except Exception as error_message:
-        print('General error', str(error_message))
+    except socket.error as error_message:
+        print('Socket Error: ', str(error_message))
         sys.exit()
 
 
