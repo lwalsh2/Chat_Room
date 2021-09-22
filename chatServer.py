@@ -4,6 +4,19 @@ importing socket library to utilize sockets for communication
 Host to network
 Wire Protocol idea for C: thread that accepts, thread per client
 Exit, how to shut down
+
+Methods
+-------
+create_key():
+    Creates and write a key for encryption.
+connect(s_address):
+    Uses the ip address to create a socket to connect to.
+client_left(exception_sockets, socket_list, client_names):
+    Removes exiting sockets.
+receive_data(client_socket):
+    Receives client input.
+run_server(server_socket, key):
+    Accepts and communicates with clients.
 """
 # Utilize sockets for connections
 import socket
@@ -17,12 +30,12 @@ from cryptography.fernet import Fernet
 
 def create_key():
     """
-    Creates and write a key for encryption
+    Creates and write a key for encryption.
 
     Returns
     -------
     key: Encryption Key
-    Server-Generated encryption key.
+        Server-Generated encryption key.
     """
     try:
         key = Fernet.generate_key()
@@ -38,7 +51,17 @@ def create_key():
 
 def connect(s_address):
     """
-    Bind, Listen, Accept, Begin -- Change s name, and try except
+    Uses the ip address to create a socket to connect to.
+
+    Parameters
+    ----------
+    s_address: ip address
+        The IP address of the server.
+
+    Returns
+    -------
+    server_socket: Socket
+        Socket used by the server to run.
     """
     try:
         # Initializing socket:
@@ -59,13 +82,25 @@ def connect(s_address):
 
 def client_left(exception_sockets, socket_list, client_names):
     """
-    Removes exiting sockets
+    Removes exiting sockets.
+
+    Parameters
+    ----------
+    exception_sockets: Socket List
+        List of sockets that the Server is no longer connected to.
+    socket_list: Socket List
+        List of all server's known sockets, including itself.
+    client_names: Socket Set
+        List of the server's client sockets.
 
     Returns
     -------
-    exception_sockets:
-    socket_list:
-    client_names:
+    exception_sockets: Socket List
+        List of sockets that the Server is no longer connected to.
+    socket_list: Socket List
+        List of all server's known sockets, including itself.
+    client_names: Socket Set
+        List of the server's client sockets.
     """
     try:
         for notified_socket in exception_sockets:
@@ -79,7 +114,12 @@ def client_left(exception_sockets, socket_list, client_names):
 
 def receive_data(client_socket):
     """
-    Receives client input
+    Receives client input.
+
+    Parameters
+    ----------
+    client_socket: Socket
+        Socket the server received data from.
     """
     try:
         message_header = client_socket.recv(4)
@@ -95,7 +135,14 @@ def receive_data(client_socket):
 
 def run_server(server_socket, key):
     """
-    Accepts and communicates with clients
+    Accepts and communicates with clients.
+
+    Parameters
+    ----------
+    server_socket: Socket
+        Socket used by the server to run.
+    key: Encryption Key
+        Server-Generated encryption key.
     """
     try:
         # initialize client socket lists
@@ -176,7 +223,6 @@ def main():
 
 
 if __name__ == "__main__":
-    # print("in _name_")
     print("Welcome to the Chat Server!\nIf you wish to exit at any time,",
           " use CTRL-C.\nFill out following to start:")
     main()

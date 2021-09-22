@@ -1,6 +1,17 @@
 """
 Client half of the code, meant to connect and communicate with server
 importing socket library to utilize sockets for communication
+
+Methods
+-------
+read_key():
+    Grabs key for encryption
+connect(s_address):
+    Connects to the server.
+username(client_socket, name):
+    Creates and send username to server.
+chat(client_socket, name, key):
+    Chats with server.
 """
 # Utilize sockets for connections
 import socket
@@ -35,15 +46,17 @@ def read_key():
 
 def connect(s_address):
     """
-    Connects to the server
+    Connects to the server.
 
     Parameter
     ---------
-    s_address:
+    s_address: IP Address
+        IP Address of the server.
 
     Returns
     -------
-    client_socket:
+    client_socket: Socket
+        Socket the client uses to interact with the server.
     """
     try:
         # Initializing socket:
@@ -63,16 +76,19 @@ def connect(s_address):
 
 def username(client_socket, name):
     """
-    Creates and send username to server
+    Creates and send username to server.
 
     Parameters
     ----------
-    client_socket:
-    name:
+    client_socket: Socket
+        Socket the client uses to interact with the server.
+    name: String
+        Name of the client
 
     Returns
     -------
-    name:
+    name: String
+        Name of the client
     """
     try:
         # Encode username for server to read
@@ -82,7 +98,6 @@ def username(client_socket, name):
         # Sending username to server to track (0 for add user,
         # 1 for send message)
         client_socket.send(name_length + encoded_name)
-        # print(f"Protocol Sent: {username_length + encoded_username}")
         return name
     except socket.error as error_message:
         print('Socket Error: ', str(error_message))
@@ -91,13 +106,16 @@ def username(client_socket, name):
 
 def chat(client_socket, name, key):
     """
-    Proceed to chat with server
+    Chats with server.
 
     Parameters
     ----------
-    client_socket:
-    name:
-    key:
+    client_socket: Socket
+        Socket the client uses to interact with the server.
+    name: String
+        Name of the client
+    key: Encryption Key
+        Server-Generated encryption key.
     """
     # Initial Message in chat
     print("You are in the chat server. Use !quit to",
