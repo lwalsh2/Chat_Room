@@ -67,7 +67,7 @@ def connect(s_address):
         # Initializing socket:
         # AF_INET refers to Internet Address Family, (specifically IPv4)
         # allowing for outside connections
-        # SOCK_STREAM refers to TCP Connection (DGRAM for UDP)
+        # SOCK_STREAM refers to TCP Connection (Datagram for UDP)
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Allow for reuse/reconnect of port
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -208,18 +208,22 @@ def main():
     Accepts Parameters of IP and Port
     (i.e. py chatServer 192.168.0.1 80)
     """
-    if len(sys.argv) > 2:
-        server_socket = connect((sys.argv[1], int(sys.argv[2])))
-        run_server(server_socket, create_key())
-    elif len(sys.argv) > 1:
-        server_socket = connect((sys.argv[1], int(input("Server Port: "))))
-        run_server(server_socket, create_key())
-    else:
-        # Ask for user input for server information, then try to connect
-        # print("in main")
-        server_socket = connect((input("Server IP: "),
-                                 int(input("Server Port: "))))
-        run_server(server_socket, create_key())
+    try:
+        if len(sys.argv) > 2:
+            server_socket = connect((sys.argv[1], int(sys.argv[2])))
+            run_server(server_socket, create_key())
+        elif len(sys.argv) > 1:
+            server_socket = connect((sys.argv[1], int(input("Server Port: "))))
+            run_server(server_socket, create_key())
+        else:
+            # Ask for user input for server information, then try to connect
+            # print("in main")
+            server_socket = connect((input("Server IP: "),
+                                     int(input("Server Port: "))))
+            run_server(server_socket, create_key())
+    except ValueError as error_message:
+        print('Invalid IP-Port connection: ', str(error_message))
+        sys.exit()
 
 
 if __name__ == "__main__":
