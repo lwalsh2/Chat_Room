@@ -45,6 +45,7 @@ void chat_system(int client_socket)
     }
 }
 
+// Sets up the socket, and tries to connect to the server.
 int start_server(int port)
 {
     // IPv4 (AF_INET), TCP (SOCK_STREAM),  Internet Protocol, TCP->0->default
@@ -109,17 +110,20 @@ int start_server(int port)
     close(server_socket);
 }
 
-
+// Verifies the argument, and calls the function to run the server portion.
 int main(int argc, char ** argv)
 {
+    // Verify the argument count is 2 (Check if the user specified a port)
     if (argc != 2)
     {
         printf("Server requires one argument - the given port to run on.\n");
         return -1;
     }
 
+    // Convert the port argument to an integer.
     int port = atoi(argv[1]);
 
+    // Verify the port range.
     if (port < 80 && port > 4000)
     {
         printf("Invalid Port number.\n");
