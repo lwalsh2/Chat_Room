@@ -36,10 +36,13 @@ void chat_system(int server_socket)
         while (message_index < BUFFER_SIZE-1 && (message[++message_index] = getchar()) != '\n' && message[message_index] != '\0');
         message[message_index] = '\n';
 
-        // and send that buffer to client
-        send(server_socket, message, BUFFER_SIZE, 0);
+        // Send the message to server if there was anything entered.
+        if (message_index > 0)
+        {
+            send(server_socket, message, BUFFER_SIZE, 0);
+        }
 
-		// Receive
+		// Receive a message from the client.
 		if (recv(server_socket, message, sizeof(message), 0) < 0)
 		{
 			printf("Failed to receive\n");
@@ -48,6 +51,7 @@ void chat_system(int server_socket)
 
         // print buffer which contains the server contents
         printf("<user> %s", message);
+        sleep(1);
     }
 }
 
