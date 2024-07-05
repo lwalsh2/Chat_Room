@@ -3,24 +3,32 @@
  * Currently echoes message from 1 client.
  * Host to network
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
+#include "cServer.h"
 
-// Message buffer size
-#define BUFFER_SIZE 128
+// Verifies the argument, and calls the function to run the server portion.
+int main(int argc, char ** argv)
+{
+    // Verify the argument count is 2 (Check if the user specified a port)
+    if (argc != 2)
+    {
+        printf("Server requires one argument - the given port to run on.\n");
+        return -1;
+    }
 
+    // Convert the port argument to an integer.
+    int port = atoi(argv[1]);
 
-// Socket builder method
-size_t create_struct(int port, struct sockaddr_in *struct_ptr){
-	(*struct_ptr).sin_family = AF_INET; // IPv4
-	(*struct_ptr).sin_addr.s_addr = INADDR_ANY; // shortcut for self
-	(*struct_ptr).sin_port = htons( port );
-	return sizeof(*struct_ptr);
+    // Verify the port range.
+    if (port < 80 && port > 4000)
+    {
+        printf("Invalid Port number.\n");
+        return -1;
+    }
+
+    // Socket Creation
+    start_server(port);
+
+    return 0;
 }
 
 // Function designed for chat between client and server.
@@ -46,7 +54,7 @@ void chat_system(int client_socket)
 }
 
 // Sets up the socket, and tries to connect to the server.
-int start_server(int port)
+void start_server(int port)
 {
     // IPv4 (AF_INET), TCP (SOCK_STREAM),  Internet Protocol, TCP->0->default
 	printf("Creating Socket\n");
@@ -108,30 +116,4 @@ int start_server(int port)
     // After chatting close the socket(s)
     close(client_socket);
     close(server_socket);
-}
-
-// Verifies the argument, and calls the function to run the server portion.
-int main(int argc, char ** argv)
-{
-    // Verify the argument count is 2 (Check if the user specified a port)
-    if (argc != 2)
-    {
-        printf("Server requires one argument - the given port to run on.\n");
-        return -1;
-    }
-
-    // Convert the port argument to an integer.
-    int port = atoi(argv[1]);
-
-    // Verify the port range.
-    if (port < 80 && port > 4000)
-    {
-        printf("Invalid Port number.\n");
-        return -1;
-    }
-
-    // Socket Creation
-    start_server(port);
-
-    return 0;
 }
