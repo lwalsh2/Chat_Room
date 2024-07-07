@@ -1,24 +1,31 @@
 /* TCP Chat Client
  * Client half of the code, meant to connect and communicate with server.
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
+#include "cClient.h"
 
-// Message buffer size
-#define BUFFER_SIZE 128
+// Verifies the argument, and calls the function to run the client portion.
+int main(int argc, char ** argv)
+{
+		// Verify the argument count is 2 (Check if the user specified a port)
+		if (argc != 2)
+    {
+        printf("Client requires one argument - the given port to run on.\n");
+        return -1;
+    }
 
+		// Convert the port argument to an integer.
+    int port = atoi(argv[1]);
 
-// Socket builder method
-size_t create_struct(int port, struct sockaddr_in *struct_ptr){
-	(*struct_ptr).sin_family = AF_INET; // IPv4
-	(*struct_ptr).sin_addr.s_addr = INADDR_ANY; // shortcut for self
-	(*struct_ptr).sin_port = htons( port );
-	return sizeof(*struct_ptr);
+		// Verify the port range.
+    if (port < 80 && port > 4000)
+    {
+        printf("Invalid Port number.\n");
+        return -1;
+    }
+
+    // Socket Creation
+    run_client(port);
+	return 0;
 }
 
 // Facilitates the communication between client and server.
@@ -77,29 +84,4 @@ void run_client(int port)
 		exit(-1);
 	}
 	chat_system(server_socket);
-}
-
-// Verifies the argument, and calls the function to run the client portion.
-int main(int argc, char ** argv)
-{
-		// Verify the argument count is 2 (Check if the user specified a port)
-		if (argc != 2)
-    {
-        printf("Client requires one argument - the given port to run on.\n");
-        return -1;
-    }
-
-		// Convert the port argument to an integer.
-    int port = atoi(argv[1]);
-
-		// Verify the port range.
-    if (port < 80 && port > 4000)
-    {
-        printf("Invalid Port number.\n");
-        return -1;
-    }
-
-    // Socket Creation
-    run_client(port);
-	return 0;
 }
