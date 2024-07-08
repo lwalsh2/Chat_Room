@@ -77,8 +77,8 @@ void run_client(int port)
 	struct sockaddr_in *struct_ptr = &server_struct;
 	size_t struct_length = create_struct(1234, struct_ptr);
 
-	// Connect to the server
-	if (connect(server_socket, (struct sockaddr *)&server_struct, sizeof(server_struct)) < 0)
+	// Connect to the server (replaced sizeof(server_struct) with struct_length)
+	if (connect(server_socket, (struct sockaddr *)&server_struct, struct_length) < 0)
 	{
 		printf("Failed to connect\n");
 		exit(-1);

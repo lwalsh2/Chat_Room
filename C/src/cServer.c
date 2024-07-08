@@ -62,7 +62,7 @@ void start_server(int port)
 	if (server_socket < 0)
 	{
 		printf("Failed to create socket\n");
-		return -1;
+		return;
 	}
 	// System call that allows for reuse of IP address and port
 	printf("Set socket to override\n");
@@ -70,7 +70,7 @@ void start_server(int port)
 	if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &option_value, sizeof(option_value)) < 0)
 	{
 		printf("Failed to reuse\n");
-		return -1;
+		return;
 	}
 	// int setsockopt(int socket, int level, int option_name, const void *option_value, socklen_t option_len);
 
@@ -86,7 +86,7 @@ void start_server(int port)
 	if ((bind(server_socket, (struct sockaddr *)&server_struct, struct_length)) < 0)
 	{
 		printf("Failed to bind\n");
-		return -1;
+		return;
 	}
 
     // Turns socket into a listener (listens for connections, and backlogs up to 5)
@@ -98,7 +98,7 @@ void start_server(int port)
 	if (listen(server_socket, 5) < 0)
 	{
 		printf("Listen failed.\n");
-		exit(-1);
+		return;
 	}
 	// Loop Listen-Accept-Send commands. Can be CTRL-C'd out
 	while(1) {
