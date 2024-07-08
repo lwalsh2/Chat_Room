@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.22)
+
 project(
     Chat_Room
     LANGUAGES "C"
