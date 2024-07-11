@@ -1,11 +1,12 @@
 /* TCP Chat Server
+ * By: Liam P. Walsh
  * Server half of the code, meant to connect and communicate with clients.
  * Currently echoes message from 1 client.
  * Host to network
 */
 #include "cServer.h"
 
-// Verifies the argument, and calls the function to run the server portion.
+// Main function that sets up and runs the client calls
 int main(int argc, char ** argv)
 {
     // Verify the argument count is 2 (Check if the user specified a port)
@@ -31,7 +32,10 @@ int main(int argc, char ** argv)
     return 0;
 }
 
-// Function designed for chat between client and server.
+/* Function designed for chat between client and server.
+ * @param: int client_socket - Socket to read and write to
+ * @returns: NULL
+ */
 void chat_system(int client_socket)
 {
     char message[BUFFER_SIZE] = "";
@@ -53,7 +57,10 @@ void chat_system(int client_socket)
     }
 }
 
-// Sets up the socket, and tries to connect to the server.
+/* Sets up the socket, and tries to connect to the server.
+ * @param: int port - Port to listen on
+ * @returns: NULL
+ */
 void start_server(int port)
 {
     // IPv4 (AF_INET), TCP (SOCK_STREAM),  Internet Protocol, TCP->0->default

@@ -1,9 +1,11 @@
 /* TCP Chat Client
+ * By: Liam P. Walsh
  * Client half of the code, meant to connect and communicate with server.
+ */
 */
 #include "cClient.h"
 
-// Verifies the argument, and calls the function to run the client portion.
+// Main function that sets up and runs the client calls
 int main(int argc, char ** argv)
 {
 		// Verify the argument count is 2 (Check if the user specified a port)
@@ -28,7 +30,10 @@ int main(int argc, char ** argv)
 	return 0;
 }
 
-// Facilitates the communication between client and server.
+/* Facilitates the communication between client and server.
+ * @param: int server_socket - Socket to read and write to
+ * @returns: NULL
+ */
 void chat_system(int server_socket)
 {
     int message_index = 0;
@@ -62,7 +67,10 @@ void chat_system(int server_socket)
     }
 }
 
-// Sets up the socket, and tries to connect to the server.
+/* Sets up the socket, and tries to connect to the server.
+ * @param: int port - Port to connect on
+ * @returns: NULL
+ */
 void run_client(int port)
 {
     // IPv4 (AF_INET), TCP (SOCK_STREAM),  Internet Protocol, TCP->0->default
