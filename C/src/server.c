@@ -4,7 +4,7 @@
  * Currently echoes message from 1 client.
  * Host to network
 */
-#include "cServer.h"
+#include "server.h"
 
 // @brief: Main function that sets up and runs the client calls
 int main(int argc, char ** argv)

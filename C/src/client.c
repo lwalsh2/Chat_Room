@@ -2,7 +2,7 @@
  * By: Liam P. Walsh
  * Client half of the code, meant to connect and communicate with server.
  */
-#include "cClient.h"
+#include "client.h"
 
 // @brief: Main function that sets up and runs the client calls
 int main(int argc, char ** argv)

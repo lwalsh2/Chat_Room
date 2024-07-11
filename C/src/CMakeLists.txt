@@ -4,8 +4,8 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
 # Define / Create Executable binaries
-add_executable(client cClient.c)
-add_executable(server cServer.c)
+add_executable(client client.c)
+add_executable(server server.c)
 
 # Add Client compilation flags / links
 target_include_directories(client PRIVATE include)
