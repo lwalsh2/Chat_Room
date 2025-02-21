@@ -64,7 +64,7 @@ void run_client(int port)
     // Create socket address struct
     struct sockaddr_in server_struct;
     struct sockaddr_in *struct_ptr = &server_struct;
-    size_t struct_length = create_struct(1234, struct_ptr);
+    size_t struct_length = create_struct(port, struct_ptr);
 
     // Connect to the server (replaced sizeof(server_struct) with struct_length)
     if (connect(server_socket, (struct sockaddr *)struct_ptr, struct_length) < 0)
