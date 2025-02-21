@@ -11,10 +11,6 @@
 #include "client.h"
 #include "socket.h"
 
-/* @brief: Facilitates the communication between client and server.
- * @param: int server_socket - Socket to read and write to
- * @returns: NULL
- */
 void chat_system(int server_socket)
 {
     int message_index = 0;
@@ -48,10 +44,6 @@ void chat_system(int server_socket)
     }
 }
 
-/* @brief: Sets up the socket, and tries to connect to the server.
- * @param: int port - Port to connect on
- * @returns: NULL
- */
 void run_client(int port)
 {
     // IPv4 (AF_INET), TCP (SOCK_STREAM),  Internet Protocol, TCP->0->default

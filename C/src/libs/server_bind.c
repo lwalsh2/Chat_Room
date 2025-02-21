@@ -11,10 +11,6 @@
 #include "server.h"
 #include "socket.h"
 
-/* @brief: Function designed for chat between client and server.
- * @param: int client_socket - Socket to read and write to
- * @returns: NULL
- */
 void chat_system(int client_socket)
 {
     char message[BUFFER_SIZE] = "";
@@ -36,10 +32,6 @@ void chat_system(int client_socket)
     }
 }
 
-/* @brief: Sets up the socket, and tries to connect to the server.
- * @param: int port - Port to listen on
- * @returns: NULL
- */
 void start_server(int port)
 {
     // IPv4 (AF_INET), TCP (SOCK_STREAM),  Internet Protocol, TCP->0->default
