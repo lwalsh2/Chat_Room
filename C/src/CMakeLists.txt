@@ -7,16 +7,8 @@ find_package(Threads REQUIRED)
 add_executable(client client.c)
 add_executable(server server.c)
 
-# Add Client compilation flags / links
-target_include_directories(client PRIVATE include)
-target_compile_options(client PRIVATE -Wall)
-set(TARGET client PROPERTY C_STANDARD 11)
-set(TARGET client PROPERTY C_STANDARD_REQUIRED ON)
+add_subdirectory(libs)
 
-# Add Server compilation flags / links
-target_include_directories(server PRIVATE include)
-target_compile_options(server PRIVATE -Wall)
-set(TARGET server PROPERTY C_STANDARD 11)
-set(TARGET server PROPERTY C_STANDARD_REQUIRED ON)
-
-target_link_libraries(server PRIVATE Threads::Threads)
+# Link libraries
+target_link_libraries(client PRIVATE client_lib)
+target_link_libraries(server PRIVATE server_lib)
