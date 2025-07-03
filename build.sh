@@ -1,9 +1,9 @@
 #!/bin/bash
-rm -rf bin client server
-mkdir bin
-cmake -B bin -S c_implementation
-cd bin
+rm -rf bin build client server
+mkdir bin build
+cmake -B build -S c_implementation
+cd build
 make
 cd ..
-cp bin/src/client .
-cp bin/src/server .
+cp build/src/client bin/
+cp build/src/server bin/
