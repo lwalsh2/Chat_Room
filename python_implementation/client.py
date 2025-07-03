@@ -160,6 +160,9 @@ def chat(client_socket, name, key):
                     print('Reading error', str(e))
                     sys.exit()
                 continue
+    except KeyboardInterrupt:
+        print("\nGoodbye")
+        sys.exit()
     except socket.error as error_message:
         print('Socket Error: ', str(error_message))
         sys.exit()
