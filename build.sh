@@ -1,5 +1,5 @@
 #!/bin/bash
-rm -rf bin build client server
+rm -rf bin build client server Definitely_Not_the_Key
 mkdir bin build
 cmake -B build -S c_implementation
 cd build

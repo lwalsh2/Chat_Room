@@ -4,9 +4,6 @@ Tasks to run through invoke
 
 from invoke import task, context
 
-# The Sort Methods that can be called:
-sort_methods = ['bubble', 'heap', 'merge', 'quick', 'tree']
-
 @task()
 def clean(cmd: context.Context) -> None:
     """Cleans artifacts from the project. Can be called with `invoke clean`.
@@ -15,7 +12,7 @@ def clean(cmd: context.Context) -> None:
     Returns:
         None
     """
-    cmd.run('rm -rf bin build client server')
+    cmd.run('rm -rf bin build client server Definitely_Not_the_Key')
 
 
 @task(clean)

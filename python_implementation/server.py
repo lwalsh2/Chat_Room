@@ -196,7 +196,7 @@ def run_server(server_socket, key):
             exception_sockets, socket_list, client_names = \
                 client_left(exception_sockets, socket_list, client_names)
     except KeyboardInterrupt:
-        print("Goodbye")
+        print("\nGoodbye")
         sys.exit()
     except socket.error as error_message:
         print('Socket Error: ', str(error_message))
