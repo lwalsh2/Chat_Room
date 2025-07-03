@@ -9,9 +9,9 @@ Server Imports: (Python)
 
 
 Operation: (Python)
-	chatServer acts as the chat room server/host for clients/users to connect to. By binding a socket to a user-determined IP and Port, chatServer listens for requests to connect, and for incoming messages. Incoming users are saved, and messages are broadcasted to the other users.
+	`server.py` acts as the chat room server/host for clients/users to connect to. By binding a socket to a user-determined IP and Port, `server.py` listens for requests to connect, and for incoming messages. Incoming users are saved, and messages are broadcasted to the other users.
 
-	chatClient acts as the chat room client/user, meant to connect to the server and send/receive messages. chatClient creates a socket to connect to the server's Multiple users connect at a time, and any user who sends a message to the server has the message broadcasted to the other users.
+	`client.py` acts as the chat room client/user, meant to connect to the server and send/receive messages. `client.py` creates a socket to connect to the server's Multiple users connect at a time, and any user who sends a message to the server has the message broadcasted to the other users.
 
 Imports: (C)
 	stdio.h, stdlib.h, string.h, sys/socket.h, sys/types.h, netinet/in.h, unistd.h
