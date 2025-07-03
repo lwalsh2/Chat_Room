@@ -17,12 +17,12 @@ Imports: (C)
 	stdio.h, stdlib.h, string.h, sys/socket.h, sys/types.h, netinet/in.h, unistd.h
 
 Operation: (C)
-	To build the binaries, run the build.sh script within the `C` folder, which moves the `client` and `server` binaries to the `bin/` folder. The binaries can be run with the port they should run on.
+	To build the binaries, you can run the `build.sh` script, or if you have Python's invoke module, you can run `invoke build`. The `client` and `server` binaries are moved to the project directory. The binaries can be run with the port they should run on.
 	```sh
-	./bin/server 5555
+	./server 5555
 	```
 	```sh
-	./bin/client 5555
+	./client 5555
 	```
 
 	Server takes an argument for the port to bind on, and listens for clients. Displays the client and the message the client sends.

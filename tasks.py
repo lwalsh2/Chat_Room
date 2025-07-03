@@ -15,7 +15,7 @@ def clean(cmd: context.Context) -> None:
     Returns:
         None
     """
-    cmd.run('rm -rf bin')
+    cmd.run('rm -rf bin client server')
 
 
 @task(clean)
@@ -26,5 +26,7 @@ def build(cmd: context.Context) -> None:
     Returns:
         None
     """
+    # Build the binaries
     cmd.run('mkdir bin;cmake -B bin -S c_implementation;cd bin;make')
-
+    # Move the binaries to the project directory
+    cmd.run('cp bin/src/client .;cp bin/src/server .')
